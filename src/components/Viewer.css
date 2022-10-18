@@ -1,0 +1,46 @@
+.key {
+  color: black;
+}
+.key:hover {
+  color: navy;
+}
+
+.awesome {
+  /* text-decoration: line-through; */
+  padding: 10px;
+}
+.number {
+  color: #c2789f;
+  /* padding: 10px; */
+}
+.number:hover,
+.string:hover {
+  color: magenta;
+}
+
+.string {
+  color: #6b9d16;
+  /* padding: 10px; */
+}
+
+div {
+  text-align: left;
+}
+
+span {
+  text-align: left;
+}
+/* 
+.objectContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.pairsContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+} */
