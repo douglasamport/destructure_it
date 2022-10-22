@@ -16,7 +16,6 @@ class InputURL extends Component {
   }
 
   handleResponse(value) {
-    // console.log(value, "INSIDE INPUT");
     this.props.handleJsonResponse(value);
   }
 

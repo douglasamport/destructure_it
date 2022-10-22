@@ -17,13 +17,37 @@ class ObjectParser extends Component {
   state = {};
   render() {
     // add in check for string, num, null, undefined here so that we can use this component recursivly
-    const obj = this.props.obj;
+    // const obj = this.props.obj;
+    let obj = this.props.obj;
+
     const type = this.props.type ? this.props.type : "";
+    if (obj === NaN) {
+      return (
+        <span className={`value nan`} data-value={obj}>
+          NaN
+        </span>
+      );
+    }
+    if (obj === undefined) {
+      return (
+        <span className={`value undefined`} data-value={obj}>
+          undefined
+        </span>
+      );
+    }
+    if (obj === null) {
+      return (
+        <span className={`value null`} data-value={obj}>
+          null
+        </span>
+      );
+    }
+
     // console.log(obj);
     if (typeof obj === "string") {
       return (
         <>
-          <span className={`awesome ${type}`} data-value={obj}>
+          <span className={`value ${type}`} data-value={obj}>
             '{obj}'
           </span>
         </>
@@ -33,38 +57,44 @@ class ObjectParser extends Component {
     if (typeof obj === "number") {
       return (
         <>
-          <span className={`awesome ${type}`} data-value={obj}>
+          <span className={`value ${type}`} data-value={obj}>
             {obj}
           </span>
         </>
       );
     }
 
-    if (typeof obj === "object" && obj !== null && obj !== undefined) {
+    if (typeof obj === "object" && Array.isArray(obj)) {
+      console.log("RUNNING");
       return (
         <span className="objectContainer">
-          <span className="parenthesis, open">&#123;</span>{" "}
+          <span className="bracket, open">&#91;</span>
+          <KeyValueParser obj={obj} />
+          <span className="bracket, close">&#93;;</span>
+        </span>
+      );
+    }
+
+    if (typeof obj === "object" && obj !== null && obj !== undefined) {
+      // if (obj) {
+      //   console.log(obj);
+      //   // obj.test = NaN;
+      // }
+      return (
+        <span className="objectContainer">
+          <span className="parenthesis, open">&#123;</span>
           <KeyValueParser obj={obj} />
           <span className="parenthesis, close">&#125;</span>
         </span>
       );
     }
-
-    // if (typeof obj === "object" && obj !== null && obj !== undefined) {
-    //   return (
-    //     <div className="objectContainer">
-    //       <div className="parenthesis, open">&#123;</div>
-    //       <KeyValueParser obj={obj} />
-    //       <div className="parenthesis, close">&#125;</div>
-    //     </div>
-    //   );
-    // }
   }
 }
+
 function getType(obj) {
-  // console.log(typeof obj, "SHOULD BE TYPE");
   return typeof obj;
 }
+
 class KeyValueParser extends Component {
   constructor(props) {
     super(props);

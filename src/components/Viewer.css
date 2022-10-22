@@ -5,9 +5,16 @@
   color: navy;
 }
 
-.awesome {
+.null {
+  color: blue;
+}
+.value {
   /* text-decoration: line-through; */
   padding: 10px;
+}
+
+.value:hover {
+  color: magenta;
 }
 .number {
   color: #c2789f;
@@ -15,7 +22,6 @@
 }
 .number:hover,
 .string:hover {
-  color: magenta;
 }
 
 .string {
