@@ -2,16 +2,13 @@ import React, { Component } from "react";
 import "./css/Viewer.css";
 import ObjectParser from "./ObjectParser";
 
-class Viewer extends Component {
+class Tray extends Component {
   constructor(props) {
     super(props);
-    this.state = { displayValue: "" };
-    // this.handleInbetweenClick = this.handleInbetweenClick.bind(this);
+    // this.state = { displayValue: "" };
   }
 
-  // // handleInbetweenClick(value) {
-  //   this.props.handleValueClick(value);
-  // }
+  state = {};
   render() {
     // console.log(this.props, "INSIDE VIEWER");
     const flexRow = {
@@ -36,31 +33,22 @@ class Viewer extends Component {
       height: "40px",
     };
 
-    let obj = this.props.value ? this.props.value : "";
-    let test = "TEST VALUE";
-    //, handleThingie: this.handleInbetweenClick
-    const props = { test, obj, handleValueClick: this.props.handleValueClick };
-    // console.log(
-    //   this.props.handleValueClick,
-    //   "PRINT PROPS AT VIEWER LEVEL <<<<<<<<"
-    // );
+    const { value } = this.props;
+    console.log(value, "TRAY VALUE");
 
-    //  NOTE -> HANDLE VALUE CLICK IS WORKING HERE>   NEED TO GET IT WORKING INSIDE OBJECT PARSER
     return (
       <div>
         <div className="sub-header" style={subHeaderStyle}></div>
         <div className="section-body" style={flexRow}>
           <p className="label" style={labelStyle}>
-            Viewer
+            Tray
           </p>
 
-          <div className="mainViewer" style={mainViewerStyle}>
-            <ObjectParser {...props} />
-          </div>
+          <div className="mainViewer" style={mainViewerStyle}></div>
         </div>
       </div>
     );
   }
 }
 
-export default Viewer;
+export default Tray;

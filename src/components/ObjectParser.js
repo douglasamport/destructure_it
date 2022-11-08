@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import domCrawler from "./process";
 /*
 TODO: 
 1. Add in Context that allows us to track depth  https://codesandbox.io/s/get-call-depth-inside-react-component-demo-grvsi?file=/src/CountDepthContext.tsx
@@ -8,16 +8,37 @@ TODO:
 
 */
 export default class ObjectParser extends Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    console.log(e.target);
+    const path = domCrawler(e.target);
+    console.log(path, "PATH");
+    console.log(this.props, "PROPS");
+    this.props.handleValueClick(path);
+  }
+
   renderValue(type, obj, dataValue) {
     return (
-      <span className={`value ${type}`} data-value={dataValue}>
+      <span
+        onClick={this.handleClick}
+        className={`value ${type}`}
+        data-value={dataValue}
+      >
         '{obj}'
       </span>
     );
   }
 
   renderContainer(parent, obj, open = "{", close = "}") {
-    const props = { obj, parent };
+    const props = {
+      obj,
+      parent,
+      handleValueClick: this.props.handleValueClick,
+    };
     return (
       <span className="objectContainer">
         <span className="bracket, open">{open}</span>
@@ -28,9 +49,8 @@ export default class ObjectParser extends Component {
   }
 
   render() {
-    const { obj, type } = this.props;
-
-    if (obj === NaN) return this.renderValue("nan", "nan", "nan");
+    const { obj } = this.props;
+    const type = typeof obj;
 
     if (obj === undefined)
       return this.renderValue("undefined", "undefined", obj);
@@ -39,8 +59,11 @@ export default class ObjectParser extends Component {
 
     if (typeof obj === "string") return this.renderValue(type, obj, obj);
 
-    if (typeof obj === "number") return this.renderValue(type, obj, obj);
-
+    if (typeof obj === "number") {
+      return isNaN(obj)
+        ? this.renderValue("nan", "NaN", "NaN")
+        : this.renderValue(type, obj, obj);
+    }
     if (typeof obj === "object" && Array.isArray(obj)) {
       return this.renderContainer("array", obj, "[", "]");
     }
@@ -57,11 +80,15 @@ class KeyValueParser extends Component {
       paddingLeft: "20px",
     };
 
-    const { obj, parent } = this.props;
+    const { obj, parent, handleValueClick } = this.props;
     const keys = Object.keys(obj);
 
     return (
-      <div className="pairsContainer" style={pairsContainerStyle}>
+      <div
+        className="pairsContainer"
+        style={pairsContainerStyle}
+        data-object-type={parent}
+      >
         {keys.map((objKey, i) => {
           const value = obj[objKey];
           const props = {
@@ -69,6 +96,8 @@ class KeyValueParser extends Component {
             value,
             objKey,
             type: typeof value,
+            parent,
+            handleValueClick,
           };
 
           return parent === "array" ? (
@@ -82,24 +111,23 @@ class KeyValueParser extends Component {
   }
 }
 
-function LineParser({ objKey: key, value, type, parent }) {
+function LineParser({ objKey: key, value, type, parent, handleValueClick }) {
+  const props = { obj: value, type, handleValueClick };
   return (
-    <div className="pair">
+    <div className="pair" data-object-type={parent}>
       <span className="key">{key}</span>
       <span className="colon">:</span>
-      <span>
-        <ObjectParser obj={value} type={type} />
-      </span>
+      <ObjectParser {...props} />
     </div>
   );
 }
 
-function ArrayLineParser({ value, type }) {
+function ArrayLineParser({ value, type, parent, handleValueClick }) {
+  //   console.log("ARRAY");
+  const props = { obj: value, type, handleValueClick };
   return (
-    <div className="pair">
-      <span>
-        <ObjectParser obj={value} type={type} />
-      </span>
+    <div className="pair" data-object-type={parent}>
+      <ObjectParser {...props} />
     </div>
   );
 }

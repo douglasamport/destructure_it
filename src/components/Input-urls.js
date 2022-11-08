@@ -12,6 +12,7 @@ class InputURL extends Component {
   }
 
   handleChange(event) {
+    console.log(this);
     this.props.handleUrlChange(event.target.value);
   }
 
@@ -20,7 +21,8 @@ class InputURL extends Component {
   }
 
   handleSubmit(event) {
-    console.log("SUBMIT");
+    console.log(this.props, "SUBMIT");
+
     this.fetchData(this.props.value);
     event.preventDefault();
   }

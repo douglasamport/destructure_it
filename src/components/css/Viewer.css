@@ -5,7 +5,9 @@
   color: navy;
 }
 
-.null {
+.null,
+.undefined,
+.nan {
   color: blue;
 }
 .value {
