@@ -1,12 +1,7 @@
 import React, { Component } from "react";
-import domCrawler from "./process";
-/*
-TODO: 
-1. Add in Context that allows us to track depth  https://codesandbox.io/s/get-call-depth-inside-react-component-demo-grvsi?file=/src/CountDepthContext.tsx
-2. use depth to help setup formatting, depth will only change for each ObjectParser that is called.
-3. add check for string null undefined etc see note below
 
-*/
+import { domCrawler, simpleObjectBuilder } from "../utils";
+
 export default class ObjectParser extends Component {
   constructor(props) {
     super(props);
@@ -14,11 +9,11 @@ export default class ObjectParser extends Component {
   }
 
   handleClick(e) {
-    console.log(e.target);
     const path = domCrawler(e.target);
     console.log(path, "PATH");
-    console.log(this.props, "PROPS");
-    this.props.handleValueClick(path);
+    const simpleObject = simpleObjectBuilder(path);
+    console.log(simpleObject, "Object Passed to Workspace");
+    this.props.handleValueClick(simpleObject);
   }
 
   renderValue(type, obj, dataValue) {
@@ -122,11 +117,21 @@ function LineParser({ objKey: key, value, type, parent, handleValueClick }) {
   );
 }
 
-function ArrayLineParser({ value, type, parent, handleValueClick }) {
+function ArrayLineParser({
+  objKey: key,
+  value,
+  type,
+  parent,
+  handleValueClick,
+}) {
+  //prettier-ignore-line
   //   console.log("ARRAY");
-  const props = { obj: value, type, handleValueClick };
+  const props = { obj: value, type, handleValueClick, key };
   return (
     <div className="pair" data-object-type={parent}>
+      <span style={{ display: "none" }} className="key">
+        {key}
+      </span>
       <ObjectParser {...props} />
     </div>
   );

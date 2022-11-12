@@ -1,16 +1,8 @@
 import React, { Component } from "react";
 import "./css/Viewer.css";
-import ObjectParser from "./ObjectParser";
 
 class Tray extends Component {
-  constructor(props) {
-    super(props);
-    // this.state = { displayValue: "" };
-  }
-
-  state = {};
   render() {
-    // console.log(this.props, "INSIDE VIEWER");
     const flexRow = {
       backgroundColor: "#FAFAFA",
       display: "flex",
@@ -34,7 +26,6 @@ class Tray extends Component {
     };
 
     const { value } = this.props;
-    console.log(value, "TRAY VALUE");
 
     return (
       <div>
@@ -44,11 +35,40 @@ class Tray extends Component {
             Tray
           </p>
 
-          <div className="mainViewer" style={mainViewerStyle}></div>
+          <div className="mainViewer" style={mainViewerStyle}>
+            {/* <TrayParser {...props} /> */}
+          </div>
         </div>
       </div>
     );
   }
 }
 
+class TrayParser extends Component {
+  state = {};
+
+  renderContainer(value, open = "{", close = "}") {
+    return (
+      <span className="objectContainer">
+        <span className="bracket, open">{open}</span>
+        <span>{value}</span>
+        <span className="bracket, close">{close}</span>
+      </span>
+    );
+  }
+
+  render() {
+    const { value } = this.props;
+
+    //Build Reducer Function to parse the values correctly
+
+    return value.map((array) => {
+      return array.map((obj) => {
+        return (
+          <>{/* <span>{this.renderContainer(obj.value, "{", "}")}</span> */}</>
+        );
+      });
+    });
+  }
+}
 export default Tray;

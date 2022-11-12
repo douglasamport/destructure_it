@@ -2,11 +2,12 @@ import React, { Component, setState } from "react";
 import InputURL from "./Input-urls";
 import Viewer from "./Viewer";
 import Tray from "./Tray";
+import { reduceWrapperArray } from "../utils/index";
 
 class Workspace extends Component {
   constructor(props) {
     super(props);
-    this.state = { urlValue: "", responseValue: "", trayValue: "" };
+    this.state = { urlValue: "", responseValue: "", trayValue: [] };
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleJsonResponse = this.handleJsonResponse.bind(this);
     this.handleValueClick = this.handleValueClick.bind(this);
@@ -24,12 +25,17 @@ class Workspace extends Component {
   }
 
   handleValueClick(value) {
-    this.setState({ trayValue: value });
-    console.log("HANDLED VALUE CLICK");
+    const { trayValue = [] } = this.state;
+    const array = [...trayValue, value];
+    const newArray = reduceWrapperArray(array);
+    this.setState({ trayValue: newArray }, () => {
+      console.log(this.state.trayValue, "Updated Tray Object");
+    });
   }
 
   render() {
     const { urlValue, responseValue, trayValue } = this.state;
+    console.log("WORKSPACE RUNNING");
     return (
       <div>
         <Tray value={trayValue} />

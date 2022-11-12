@@ -12,7 +12,6 @@ class InputURL extends Component {
   }
 
   handleChange(event) {
-    console.log(this);
     this.props.handleUrlChange(event.target.value);
   }
 
@@ -21,8 +20,6 @@ class InputURL extends Component {
   }
 
   handleSubmit(event) {
-    console.log(this.props, "SUBMIT");
-
     this.fetchData(this.props.value);
     event.preventDefault();
   }
@@ -77,12 +74,7 @@ class InputURL extends Component {
             value={this.props.value}
             onChange={this.handleChange}
           ></input>
-          <input
-            style={submitStyle}
-            type="submit"
-            value="Submit"
-            // onSubmit={this.handleSubmit}
-          ></input>
+          <input style={submitStyle} type="submit" value="Submit"></input>
         </form>
       </div>
     );

@@ -44,7 +44,7 @@ class Viewer extends Component {
     //   this.props.handleValueClick,
     //   "PRINT PROPS AT VIEWER LEVEL <<<<<<<<"
     // );
-
+    console.log("VIEWER RUNNING");
     //  NOTE -> HANDLE VALUE CLICK IS WORKING HERE>   NEED TO GET IT WORKING INSIDE OBJECT PARSER
     return (
       <div>
