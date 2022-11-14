@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-
-import { domCrawler, simpleObjectBuilder } from "../utils";
+import { domCrawler, simpleObjectBuilder } from "../utils/index";
 
 export default class ObjectParser extends Component {
   constructor(props) {
@@ -10,9 +9,8 @@ export default class ObjectParser extends Component {
 
   handleClick(e) {
     const path = domCrawler(e.target);
-    console.log(path, "PATH");
+    console.log(path);
     const simpleObject = simpleObjectBuilder(path);
-    console.log(simpleObject, "Object Passed to Workspace");
     this.props.handleValueClick(simpleObject);
   }
 

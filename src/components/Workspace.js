@@ -2,7 +2,11 @@ import React, { Component, setState } from "react";
 import InputURL from "./Input-urls";
 import Viewer from "./Viewer";
 import Tray from "./Tray";
-import { reduceWrapperArray } from "../utils/index";
+import {
+  reduceWrapperArray,
+  domCrawler,
+  simpleObjectBuilder,
+} from "../utils/index";
 
 class Workspace extends Component {
   constructor(props) {
@@ -14,9 +18,7 @@ class Workspace extends Component {
   }
 
   handleUrlChange(url) {
-    console.log("handleURLChange");
     this.setState({ urlValue: url });
-    console.log(url);
   }
 
   handleJsonResponse(value) {
@@ -25,30 +27,38 @@ class Workspace extends Component {
   }
 
   handleValueClick(value) {
+    // console.log(value, "VALUE");
     const { trayValue = [] } = this.state;
+    // console.log(trayValue);
     const array = [...trayValue, value];
+    // console.log(array, "ARRAY");
     const newArray = reduceWrapperArray(array);
+    // console.log(newArray, "COMBINED");
     this.setState({ trayValue: newArray }, () => {
-      console.log(this.state.trayValue, "Updated Tray Object");
+      // console.log(this.state.trayValue, "Updated Tray Object");
     });
   }
 
   render() {
     const { urlValue, responseValue, trayValue } = this.state;
-    console.log("WORKSPACE RUNNING");
+    const { copy } = this.props;
+    // const trayProps = { pathObjects: trayValue };
+    const inputUrlProps = {
+      copy,
+      value: urlValue,
+      handleUrlChange: this.handleUrlChange,
+      handleJsonResponse: this.handleJsonResponse,
+    };
+    const viewerProps = {
+      value: responseValue,
+      handleValueClick: this.handleValueClick,
+    };
+
     return (
       <div>
         <Tray value={trayValue} />
-        <InputURL
-          copy={this.props.copy}
-          value={urlValue}
-          handleUrlChange={this.handleUrlChange}
-          handleJsonResponse={this.handleJsonResponse}
-        />
-        <Viewer
-          value={responseValue}
-          handleValueClick={this.handleValueClick}
-        />
+        <InputURL {...inputUrlProps} />
+        <Viewer {...viewerProps} />
       </div>
     );
   }

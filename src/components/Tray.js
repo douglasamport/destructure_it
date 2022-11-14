@@ -36,7 +36,7 @@ class Tray extends Component {
           </p>
 
           <div className="mainViewer" style={mainViewerStyle}>
-            {/* <TrayParser {...props} /> */}
+            <StructureBuilder value={value} />
           </div>
         </div>
       </div>
@@ -44,31 +44,54 @@ class Tray extends Component {
   }
 }
 
-class TrayParser extends Component {
-  state = {};
+//WORKING HERE   May need to add Parent key So that we can tell who has parents and if they need brackets
 
-  renderContainer(value, open = "{", close = "}") {
-    return (
-      <span className="objectContainer">
-        <span className="bracket, open">{open}</span>
-        <span>{value}</span>
-        <span className="bracket, close">{close}</span>
-      </span>
-    );
-  }
+//Commas parens and index not working as I expected.
 
+class StructureBuilder extends Component {
   render() {
-    const { value } = this.props;
+    let { value: pathObjects } = this.props;
+    let renderContainer = [];
+    let groupParens = false;
 
-    //Build Reducer Function to parse the values correctly
-
-    return value.map((array) => {
-      return array.map((obj) => {
-        return (
-          <>{/* <span>{this.renderContainer(obj.value, "{", "}")}</span> */}</>
+    console.log(pathObjects, "value in strucutre builder");
+    if (!pathObjects.length) return <></>;
+    const totalLength = pathObjects.length;
+    if (totalLength > 1) groupParens = true;
+    pathObjects.forEach((object, index) => {
+      let [open, close, comma] = ["{", "}", ""];
+      if (groupParens) {
+        open = "";
+        close = "";
+        if (index === 0) open = "{";
+        if (index === totalLength - 1) close = "}";
+        if (index !== totalLength - 1) comma = ",";
+      }
+      let block;
+      if (object.children) {
+        pathObjects = object.children;
+        block = (
+          <div>
+            <span>{open}</span>
+            <span>{`${object.value}`}</span>
+            <span>{":"}</span>
+            {<StructureBuilder value={pathObjects} />}
+            <span>{`${close}${comma}`}</span>
+          </div>
         );
-      });
+      } else {
+        block = (
+          <>
+            <span>{open}</span>
+            <span>{`${object.value}${comma}`}</span>
+            <span>{close}</span>
+          </>
+        );
+      }
+      renderContainer.push(block);
     });
+    return renderContainer;
   }
 }
+
 export default Tray;
