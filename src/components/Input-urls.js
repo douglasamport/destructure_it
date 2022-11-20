@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 // testing API https://www.boredapi.com/api/activity
 // nested objects https://api.coindesk.com/v1/bpi/currentprice.json
+
+//https://www.adidas.co.uk/api/products/IA3912   Figure out how to make you work!!!
 class InputURL extends Component {
   constructor(props) {
     super(props);
@@ -25,11 +27,30 @@ class InputURL extends Component {
   }
 
   fetchData(url) {
-    fetch(url)
+    const headers = {
+      // credentials: "same-origin",
+      "Access-Control-Allow-Origin": "*",
+      "access-control-allow-credentials": true,
+      // "access-control-allow-headers": "*",
+      "access-control-allow-methods": "GET,POST",
+      // "sec-fetch-mode": "navigate",
+      // "sec-fetch-site": "none",
+    };
+    const options = {
+      credentials: "include",
+      mode: "cors",
+    };
+
+    const server = "http://localhost:3000/";
+    console.log(`${server}param?url=${url}`, "URL");
+    fetch(`${server}param?url=${url}`, options)
       .then(async (response) => {
+        console.log("Working");
+        console.log(response);
         return await response.json();
       })
       .then((json) => {
+        console.log(json.headers);
         this.handleResponse(json);
       })
       .catch((error) => console.log(error));
